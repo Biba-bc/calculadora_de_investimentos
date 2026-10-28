@@ -5,63 +5,152 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>calculadora-de-investimentos</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
   </head>
   <body class="grid grid-cols-3 grid-rows-2 h-dvh">
     <aside class="bg-red-400 row-span-2 flex flex-col justify-between py-5">
       <h1 class="text-2xl font-bold px-6 py-2 text-amber-50 text">
         Calculadora de Investimentos
       </h1>
-      <form class="w-full">
-        <div class="flex w-full flex-col px-2 my-2">
-          <label for="starting-amount" class="text-amber-50 font-bold text-opacity-80">Investimento Inicial</label>
+      <form id="investment-form" class="w-full">
+        <div class="flex w-full flex-col px-2 my-2 h-[4.25rem]">
+          <label
+            for="starting-amount"
+            class="text-amber-50 font-bold text-opacity-80"
+          >
+            Investimento Inicial
+          </label>
           <div class="flex">
-            <input class="w-1/6 text-amber-50 text-center rounded-l-lg" value="R$" disabled />
-            <input class="w-5/6 text-red-500 rounded-r-lg px-2" placeholder="0.00" id="starting-amount" type="text" />
+            <input
+              class="w-1/6 text-amber-50 text-center rounded-l-lg"
+              value="R$"
+              disabled
+            />
+            <input
+              class="w-5/6 text-red-500 rounded-r-lg px-2"
+              placeholder="0.00"
+              id="starting-amount"
+              name="starting-amount"
+              type="text"
+              required
+            />
           </div>
         </div>
-        <div class="flex w-full flex-col px-2 my-2">
-          <label for="additional-contribution" class="text-amber-50 font-bold text-opacity-80">Aportos adcionais</label>
+        <div class="flex h-[4.25rem] w-full flex-col px-2 my-2">
+          <label
+            for="additional-contribution"
+            class="text-amber-50 font-bold text-opacity-80"
+          >
+            Aportos adcionais
+          </label>
           <div class="flex">
-            <input class="w-1/6 text-amber-50 text-center rounded-l-lg" value="R$" disabled />
-            <input class="w-5/6 text-red-500 rounded-r-lg px-2" placeholder="0.00" id="additional-contribution" type="text" />
+            <input
+              class="w-1/6 text-amber-50 text-center rounded-l-lg"
+              value="R$"
+              disabled
+            />
+            <input
+              class="w-5/6 text-red-500 rounded-r-lg px-2"
+              placeholder="0.00"
+              id="additional-contribution"
+              name="additional-contribution"
+              type="text"
+            />
           </div>
         </div>
-        <div class="flex w-full flex-col px-2 my-2">
-          <label for="time-amount-period" class="text-amber-50 font-bold text-opacity-80">Prazo</label>
+        <div class="flex h-[4.25rem] w-full flex-col px-2 my-2">
+          <label
+            for="time-amount"
+            class="text-amber-50 font-bold text-opacity-80"
+          >
+            Prazo
+          </label>
           <div class="flex">
-            <input class="w-4/6 rounded-l-lg text-red-500 px-2" placeholder="0" id="time-amount-period" type="text" />
-            <select id="evaluation-period" class="w-1/3 rounded-r-lg text-center hover:bg-red-300 cursor-pointer border-l-2 border-red-400 text-red-500 hover:text-amber-50">
+            <input
+              class="w-4/6 rounded-l-lg text-red-500 px-2"
+              placeholder="0"
+              id="time-amount"
+              name="time-amount"
+              type="text"
+              required
+            />
+            <select
+              id="time-amount-period"
+              name="time-amount-period"
+              class="w-1/3 rounded-r-lg text-center hover:bg-red-300 cursor-pointer border-l-2 border-red-400 text-red-500 hover:text-amber-50"
+            >
               <option value="monthly">Mensal</option>
               <option value="yearly">Anual</option>
             </select>
           </div>
         </div>
-        <div class="flex w-full flex-col px-2 my-2">
-          <label for="return-rate" class="text-amber-50 font-bold text-opacity-80">Rentabilidade</label>
+        <div class="flex h-[4.25rem] w-full flex-col px-2 my-2">
+          <label
+            for="return-rate"
+            class="text-amber-50 font-bold text-opacity-80"
+          >
+            Rentabilidade
+          </label>
           <div class="flex">
-            <input class="w-1/6 text-amber-50 text-center rounded-l-lg" value="%" disabled />
-            <input class="w-1/2 text-red-500 px-2" placeholder="0" id="return-rate" type="text" />
-            <select id="evaluation-period" class="w-1/3 rounded-r-lg text-center hover:bg-red-300 cursor-pointer border-l-2 border-red-400 text-red-500 hover:text-amber-50">
+            <input
+              class="w-1/6 text-amber-50 text-center rounded-l-lg"
+              value="%"
+              disabled
+            />
+            <input
+              class="w-1/2 text-red-500 px-2"
+              placeholder="0"
+              id="return-rate"
+              name="return-rate"
+              type="text"
+              required
+            />
+            <select
+              id="evaluation-period"
+              name="evaluation-period"
+              class="w-1/3 rounded-r-lg text-center hover:bg-red-300 cursor-pointer border-l-2 border-red-400 text-red-500 hover:text-amber-50"
+            >
               <option value="monthly">Mensal</option>
               <option value="yearly">Anual</option>
             </select>
           </div>
         </div>
-        <div class="flex w-full flex-col px-2 my-2">
-          <label for="tax-rate" class="text-amber-50 font-bold text-opacity-80">Impostos sobre lucro</label>
+        <div class="flex h-[4.25rem] w-full flex-col px-2 my-2">
+          <label for="tax-rate" class="text-amber-50 font-bold text-opacity-80">
+            Impostos sobre lucro
+          </label>
           <div class="flex">
-            <input class="w-1/6 text-amber-50 text-center rounded-l-lg" value="%" disabled />
-            <input class="w-5/6 text-red-500 rounded-r-lg px-2" placeholder="0" id="tax-rate" type="text" />
+            <input
+              class="w-1/6 text-amber-50 text-center rounded-l-lg"
+              value="%"
+              disabled
+            />
+            <input
+              class="w-5/6 text-red-500 rounded-r-lg px-2"
+              placeholder="0"
+              id="tax-rate"
+              name="tax-rate"
+              type="text"
+              required
+            />
           </div>
         </div>
       </form>
       <div class="flex h-12 px-6 my-8 w-full gap-2">
-        <button class="w-1/2 rounded-lg bg-red-500 text-amber-50 hover:bg-red-300 hover:text-red-500">Calcular</button>
-        <button class="w-1/2 rounded-lg border border-solid border-red-500 text-amber-50 hover:bg-red-300 hover:text-red-500">Limpar</button>
+        <button
+          class="w-1/2 rounded-lg bg-red-500 text-amber-50 hover:bg-red-300 hover:text-red-500"
+          id="calculate-results"
+          name="calculate-results"
+          form="investment-form"
+        >
+          Calcular
+        </button>
+        <button class="w-1/2 rounded-lg border border-solid border-amber-50 bg-transparent text-amber-50 hover:bg-amber-50 hover:text-red-500 transition-colors" id="clear-results" name="clear-results">Limpar</button>
       </div>
     </aside>
     <main>
       <p>resultados</p>
     </main>
+    <script type="module" src="main.js"></script>
   </body>
 </html>

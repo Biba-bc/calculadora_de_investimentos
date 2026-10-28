@@ -1,26 +1,24 @@
-const { startTransition } = require("react");
-
 function convertToMonthlyReturnRate(yearReturnRate) {
   return yearReturnRate ** (1 / 12);
 }
 
-function generateReturnsArray(
+export function generateReturnsArray(
   startingAmount = 0,
   timeHorizon = 0,
   timePeriod = "monthly",
   monthlyContribution = 0,
   returnRate = 0,
   returnTimeFrame = "monthly",
-) {}
-
-if (!timeHorizon || !startingAmount) {
-  throw new Error(
-    "Investimento inicial e prazo devem ser preenchidos com valores positivos",
-  );
+) {
+  if (!timeHorizon || !startingAmount) {
+    throw new Error(
+      "Investimento inicial e prazo devem ser preenchidos com valores positivos",
+    );
+  }
 
   const finalReturnRate =
-    returnTimeFrame == "monthly"
-      ? 1 + returnRate
+    returnTimeFrame === "monthly"
+      ? 1 + returnRate / 100 
       : convertToMonthlyReturnRate(1 + returnRate / 100);
 
   const finalTimeHorizon =
@@ -41,20 +39,19 @@ if (!timeHorizon || !startingAmount) {
     timeReference <= finalTimeHorizon;
     timeReference++
   ) {
-    const totalAmount =
-      returnsArray[timeReference - 1].totalAmount * finalReturnRate +
-      monthlyContribution;
-    const interestReturns =
-      returnsArray[timeReference - 1].totalAmount * finalReturnRate;
+    const previousAmount = returnsArray[timeReference - 1].totalAmount;
+    const totalAmount = previousAmount * finalReturnRate + monthlyContribution;
+    const interestReturns = previousAmount * (finalReturnRate - 1);
     const investedAmount = startingAmount + monthlyContribution * timeReference;
     const totalInterestReturns = totalAmount - investedAmount;
+    
     returnsArray.push({
-    investedAmount,
-    interestReturns,
-    totalInterestReturns,
-    month: timeReference,
-    totalAmount,
-    })
+      investedAmount,
+      interestReturns,
+      totalInterestReturns,
+      month: timeReference,
+      totalAmount,
+    });
   }
 
   return returnsArray;

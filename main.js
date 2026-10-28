@@ -1,0 +1,95 @@
+import { generateReturnsArray } from "./src/assets/investiment-goals.js";
+
+const form = document.getElementById("investment-form");
+
+const btnLimpar = document.getElementById("clear-results");
+
+function renderProgression(evt) {
+  evt.preventDefault();
+  if (document.querySelector(".error")) {
+    return;
+  }
+  try {
+    const startingAmount = Number(
+      document.getElementById("starting-amount").value.replace(",", "."),
+    );
+    const additionalContribution = Number(
+      document
+        .getElementById("additional-contribution")
+        .value.replace(",", "."),
+    );
+    const timeAmount = Number(document.getElementById("time-amount").value);
+    const timeAmountPeriod =
+      document.getElementById("time-amount-period").value;
+    const returnRate = Number(
+      document.getElementById("return-rate").value.replace(",", "."),
+    );
+    const returnRatePeriod = document.getElementById("evaluation-period").value;
+    const taxRate = Number(
+      document.getElementById("tax-rate").value.replace(",", "."),
+    );
+
+    const returnsArray = generateReturnsArray(
+      startingAmount,
+      timeAmount,
+      timeAmountPeriod,
+      additionalContribution,
+      returnRate,
+      returnRatePeriod,
+    );
+
+    console.log(returnsArray);
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
+function clearForm() {
+  for (const formElement of form) {
+    if (formElement.tagName === "INPUT" && formElement.hasAttribute("name")) {
+      formElement.value = "";
+    }
+  }
+
+  const errorInputsContainers = document.querySelectorAll('.error')
+  for (const errorInputsContainer of errorInputsContainers){
+    errorInputsContainer.classList.remove('error');
+    errorInputsContainer.parentElement.querySelector('p').remove()
+    
+  }
+}
+
+function validateInput(evt) {
+  if (evt.target.value === "") {
+    return;
+  }
+  const inputValue = evt.target.value.replace(",", ".");
+  const { parentElement } = evt.target;
+  const grandParentElement = evt.target.parentElement.parentElement;
+  if (
+    !parentElement.classList.contains("error") &&
+    (isNaN(inputValue) || Number(inputValue) <= 0)
+  ) {
+    parentElement.classList.add("error");
+    const errorTextElement = document.createElement("p");
+    errorTextElement.classList.add("text-red-600");
+    errorTextElement.innerText = "Insira um valor numérico maior que zero.";
+    grandParentElement.appendChild(errorTextElement);
+  } else if (
+    !isNaN(inputValue) &&
+    Number(inputValue) > 0 &&
+    parentElement.classList.contains("error")
+  ) {
+    parentElement.classList.remove("error");
+    grandParentElement.querySelector("p").remove();
+  }
+}
+for (const formElement of form) {
+  if (formElement.tagName === "INPUT" && formElement.hasAttribute("name")) {
+    formElement.addEventListener("blur", validateInput);
+  }
+}
+
+form.addEventListener("submit", renderProgression);
+
+btnLimpar.addEventListener("click", clearForm);
