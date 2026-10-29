@@ -98,7 +98,6 @@ function renderProgression(evt) {
       plugins: {
         title: {
           display: true,
-          text: "Chart.js Bar Chart - Stacked",
         },
       },
       responsive: true,
