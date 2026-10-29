@@ -174,6 +174,6 @@ for (const formElement of form) {
   }
 }
 
-form.addEventListener("submit", renderProgression);
+// form.addEventListener("submit", renderProgression);
 
 btnLimpar.addEventListener("click", clearForm);
