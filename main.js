@@ -1,46 +1,130 @@
+import { Chart } from "chart.js/auto";
 import { generateReturnsArray } from "./src/assets/investiment-goals.js";
 
+const finalMoneyChart = document.getElementById("final-money-distribution");
+const progressionChart = document.getElementById("progression");
 const form = document.getElementById("investment-form");
-
 const btnLimpar = document.getElementById("clear-results");
+let doughnutChartReference = {};
+let progressionChartReference = {};
+
+function formatCurrency(value) {
+  return value.toFixed(2);
+}
 
 function renderProgression(evt) {
   evt.preventDefault();
   if (document.querySelector(".error")) {
     return;
   }
-  try {
-    const startingAmount = Number(
-      document.getElementById("starting-amount").value.replace(",", "."),
-    );
-    const additionalContribution = Number(
-      document
-        .getElementById("additional-contribution")
-        .value.replace(",", "."),
-    );
-    const timeAmount = Number(document.getElementById("time-amount").value);
-    const timeAmountPeriod =
-      document.getElementById("time-amount-period").value;
-    const returnRate = Number(
-      document.getElementById("return-rate").value.replace(",", "."),
-    );
-    const returnRatePeriod = document.getElementById("evaluation-period").value;
-    const taxRate = Number(
-      document.getElementById("tax-rate").value.replace(",", "."),
-    );
 
-    const returnsArray = generateReturnsArray(
-      startingAmount,
-      timeAmount,
-      timeAmountPeriod,
-      additionalContribution,
-      returnRate,
-      returnRatePeriod,
-    );
+  resetCharts();
 
-    console.log(returnsArray);
-  } catch (error) {
-    console.error(error.message);
+  const startingAmount = Number(
+    document.getElementById("starting-amount").value.replace(",", "."),
+  );
+  const additionalContribution = Number(
+    document.getElementById("additional-contribution").value.replace(",", "."),
+  );
+  const timeAmount = Number(document.getElementById("time-amount").value);
+  const timeAmountPeriod = document.getElementById("time-amount-period").value;
+  const returnRate = Number(
+    document.getElementById("return-rate").value.replace(",", "."),
+  );
+  const returnRatePeriod = document.getElementById("evaluation-period").value;
+  const taxRate = Number(
+    document.getElementById("tax-rate").value.replace(",", "."),
+  );
+
+  const returnsArray = generateReturnsArray(
+    startingAmount,
+    timeAmount,
+    timeAmountPeriod,
+    additionalContribution,
+    returnRate,
+    returnRatePeriod,
+  );
+
+  const finalnvestmentObject = returnsArray[returnsArray.length - 1];
+
+  doughnutChartReference = new Chart(finalMoneyChart, {
+    type: "doughnut",
+    data: {
+      labels: ["Total Investido", "Rendimento", "Imposto"],
+      datasets: [
+        {
+          data: [
+            formatCurrency(finalnvestmentObject.investedAmount),
+            formatCurrency(
+              finalnvestmentObject.totalInterestReturns * (1 - taxRate / 100),
+            ),
+            formatCurrency(
+              finalnvestmentObject.totalInterestReturns * (taxRate / 100),
+            ),
+          ],
+          backgroundColor: [
+            "rgb(255, 99, 132)",
+            "rgb(54, 162, 235)",
+            "rgb(255, 205, 86)",
+          ],
+          hoverOffset: 4,
+        },
+      ],
+    },
+  });
+
+  progressionChartReference = new Chart(progressionChart, {
+    type: "bar",
+    data: {
+      labels: returnsArray.map((investmentObject) => investmentObject.month),
+      datasets: [
+        {
+          label: "Total Investido",
+          data: returnsArray.map((investmentObject) =>
+            formatCurrency(investmentObject.investedAmount),
+          ),
+          backgroundColor: "rgb(255, 99, 132)",
+        },
+        {
+          label: "Retorno do investimento",
+          data: returnsArray.map((investmentObject) =>
+            formatCurrency(investmentObject.interestReturns),
+          ),
+          backgroundColor: "rgb(54, 162, 235)",
+        },
+      ],
+    },
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: "Chart.js Bar Chart - Stacked",
+        },
+      },
+      responsive: true,
+      scales: {
+        x: {
+          stacked: true,
+        },
+        y: {
+          stacked: true,
+        },
+      },
+    },
+  });
+}
+
+function isObjectEmpty(obj) {
+  return Object.keys(obj).length === 0;
+}
+
+function resetCharts() {
+  if (
+    !isObjectEmpty(doughnutChartReference) &&
+    !isObjectEmpty(progressionChartReference)
+  ) {
+    doughnutChartReference.destroy();
+    progressionChartReference.destroy();
   }
 }
 
@@ -51,11 +135,12 @@ function clearForm() {
     }
   }
 
-  const errorInputsContainers = document.querySelectorAll('.error')
-  for (const errorInputsContainer of errorInputsContainers){
-    errorInputsContainer.classList.remove('error');
-    errorInputsContainer.parentElement.querySelector('p').remove()
-    
+  resetCharts();
+
+  const errorInputsContainers = document.querySelectorAll(".error");
+  for (const errorInputsContainer of errorInputsContainers) {
+    errorInputsContainer.classList.remove("error");
+    errorInputsContainer.parentElement.querySelector("p").remove();
   }
 }
 
