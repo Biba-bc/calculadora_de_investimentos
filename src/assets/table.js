@@ -17,6 +17,8 @@ export const createTable = (columnsArray, dataArray, tableId) => {
     throw new Error("Id informado não corresponde a nenhum elemento table.");
   }
 
+  tableElement.innerHTML = "";
+
   createTableHeader(tableElement, columnsArray);
   createTableBody(tableElement, dataArray, columnsArray);
 };
@@ -30,7 +32,9 @@ function createTableHeader(tableReference, columnsArray) {
   const tableHeaderReference =
     tableReference.querySelector("thead") ?? createTheadElement(tableReference);
   const headerRow = document.createElement("tr");
-  ['bg-red-500', "text-amber-50", 'sticky', 'top-0'].forEach(cssClass => headerRow.classList.add(cssClass))
+  ["bg-red-500", "text-amber-50", "sticky", "top-0"].forEach((cssClass) =>
+    headerRow.classList.add(cssClass),
+  );
   for (const tableColumnObject of columnsArray) {
     const headerElement = /*html*/ `<th class="text-center">${tableColumnObject.columnLabel}</th>`;
     headerRow.innerHTML += headerElement;
@@ -50,8 +54,8 @@ function createTableBody(tableReference, tableItens, columnsArray) {
 
   for (const [itemIndex, tableItem] of tableItens.entries()) {
     const tableRow = document.createElement("tr");
-    if(itemIndex % 2 !== 0){
-        tableRow.classList.add('bg-red-200')
+    if (itemIndex % 2 !== 0) {
+      tableRow.classList.add("bg-red-200");
     }
     for (const tableColumn of columnsArray) {
       const formatFtn = tableColumn.format ?? ((info) => info);
